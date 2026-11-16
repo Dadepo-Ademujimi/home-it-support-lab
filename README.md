@@ -31,3 +31,11 @@ A small Windows network I built to practise real service desk work: setting up a
 - DNS is everything in a domain: the client must point at the domain controller, or it can't join
 - Event Viewer IDs lead you straight to the cause. 1511 and 1515 together mean a profile mismatch
 - Check before you change: there were two similar registry keys, and only one belonged to the affected user
+
+## Fault 2: Users can't print (print server down)
+- **Symptom:** "I printed but nothing came out." No error, empty queue; a second user was affected too
+- **Cause:** Print Spooler stopped and disabled on the print server (DC01). Event 7040 showed when, and which admin account
+- **Fix:** set the spooler back to Automatic and started it; verified printing for both users
+- **Ticket:** INC-002, priority P2 (all users affected)
+
+[Full ticket and screenshots](stage-2-windows-support/fault-2-print-server-spooler/)

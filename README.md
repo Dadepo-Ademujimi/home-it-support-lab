@@ -39,3 +39,13 @@ A small Windows network I built to practise real service desk work: setting up a
 - **Ticket:** INC-002, priority P2 (all users affected)
 
 [Full ticket and screenshots](stage-2-windows-support/fault-2-print-server-spooler/)
+
+## Fault 3: Windows Update blocked by Group Policy
+- **Symptom:** updates failed with error 0x8024500C; settings "managed by your organisation's policy"
+- **Cause:** GPO "Workstation Baseline" pointed PCs at a WSUS server that doesn't exist and blocked Microsoft's servers
+- **Fix:** found the winning GPO with gpresult, set both settings to Not Configured, verified updates install again
+- **Ticket:** INC-003, priority P3
+
+[Full ticket and screenshots](stage-2-windows-support/fault-3-windows-update-gpo/)
+
+> Note: the client was originally named **WA01** by mistake and was renamed to **WS01** under change record CHG-001.

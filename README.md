@@ -14,23 +14,15 @@ A small Windows network I built to practise real service desk work: setting up a
 4. Set up Group Policy: password and lockout policy, S: mapped drive, and a Sales-only desktop lockdown
 5. Joined WS01 to the domain and logged in as a domain user; confirmed each policy with gpresult
 
+[Full write-up and screenshots](stage-1-active-directory/)
+
 ## Fault 1: User logged into a temporary profile
 - **Symptom:** "We can't sign in to your account"; empty desktop and Documents, so the user thought their files were gone
 - **Cause:** the user's profile folder had been renamed, so it no longer matched the registry. Event Viewer showed IDs 1511 and 1515, and Windows had renamed the profile's registry key to .bak
 - **Fix:** confirmed which registry key belonged to the user, removed .bak, set State to 0, renamed the folder back, restarted, deleted the leftover TEMP folder
-- **Ticket:** INC-001 logged with priority (P3), evidence, root cause, resolution and prevention
+- **Ticket:** INC-001, priority P3
 
-## Coming next
-- Fault 2: printer not printing (Print Spooler)
-- Fault 3: Windows Update failing because of a bad Group Policy setting
-- Fault 4: user can open but not save files on a shared folder
-- Fault 5: BitLocker recovery key
-- Account lockout and password reset
-
-## What I learned
-- DNS is everything in a domain: the client must point at the domain controller, or it can't join
-- Event Viewer IDs lead you straight to the cause. 1511 and 1515 together mean a profile mismatch
-- Check before you change: there were two similar registry keys, and only one belonged to the affected user
+[Full ticket and screenshots](stage-2-windows-support/fault-1-corrupt-profile/)
 
 ## Fault 2: Users can't print (print server down)
 - **Symptom:** "I printed but nothing came out." No error, empty queue; a second user was affected too
@@ -49,3 +41,16 @@ A small Windows network I built to practise real service desk work: setting up a
 [Full ticket and screenshots](stage-2-windows-support/fault-3-windows-update-gpo/)
 
 > Note: the client was originally named **WA01** by mistake and was renamed to **WS01** under change record CHG-001.
+
+## Coming next
+- Fault 4: user can open but not save files on a shared folder
+- Fault 5: BitLocker recovery key
+- Account lockout and password reset
+
+## What I learned
+- DNS is everything in a domain: the client must point at the domain controller, or it can't join
+- Event Viewer IDs lead you straight to the cause. 1511 and 1515 together mean a profile mismatch
+- Check before you change: there were two similar registry keys, and only one belonged to the affected user
+- "One user or everyone?" separates a client fault from a server fault
+- Anything under HKLM\SOFTWARE\Policies comes from Group Policy, and gpresult names the GPO responsible
+- Run `hostname` before every command, so you're sure which machine you're on
